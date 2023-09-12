@@ -53,4 +53,4 @@ jobs:
           docker build -t nodeimage:${{ github.sha }} .
           docker tag nodeimage:${{ github.sha }} nodeimage:latest
           docker push nodeimage:${{ github.sha }}
-          docker push nodeimage:latest
+          docker push nodeimage/${{ secrets.DOCKER_USERNAME }}:latest
