@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/test", (req, res) => {
-    res.send("Test!");
+    res.send("Testing the node server");
 });
 
 app.listen(PORT, () => {
