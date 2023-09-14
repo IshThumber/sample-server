@@ -33,10 +33,23 @@ jobs:
                       echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
             - name: Run docker image to Container
+              # run: |
+              #     sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+              #     sudo docker rm -f nodecontainer
+              #     sudo docker run -d -p 5000:2001 --name nodecontainer ${{ secrets.DOCKER_USERNAME }}/nodeimage
+
               run: |
-                  sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
-                  sudo docker rm -f nodecontainer
-                  sudo docker run -d -p 5000:2001 --name nodecontainer ${{ secrets.DOCKER_USERNAME }}/nodeimage
+                docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+                
+                if docker ps -a | grep -q 'nodecontainer'; then
+                  docker stop nodecontainer
+                  docker rm nodecontainer
+                fi
+                
+                docker run -d -p 5000:2001 \
+                  --name nodecontainer \
+                  ${{ secrets.DOCKER_USERNAME }}/nodeimage
+              timeout-minutes: 5 # Set a timeout if the container doesn't start successfully
 
 # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
 # sudo docker rm -f nodecontainer
