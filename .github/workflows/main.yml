@@ -1,28 +1,82 @@
-name: Build and Deploy
+# name: Build and Deploy
+
+# on:
+#   push:
+#     branches:
+#       - main # Change this to your default branch
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up Node.js
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: 18 # You can change the Node.js version as needed
+
+#     - name: Install dependencies
+#       run: npm install
+
+#     - name: Build Docker image
+#       run: |
+#         docker build -t nodeimage:${{ github.sha }} .
+#         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+#         docker push nodeimage:${{ github.sha }}
+
+
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
-      - main # Change this to your default branch
+      - main
 
 jobs:
-  build:
+  build-and-push-docker:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14 # You can change the Node.js version as needed
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Install dependencies
-      run: npm install
+      - name: Build Docker image
+        run: |
+          docker build . -t ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+  
+      - name: Execute SSH commmands on remote server
+        uses: JimCronqvist/action-ssh@master
+        with:
+          hosts: 'ubuntu@15.206.187.32:22'
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          debug: false
+          command: |
+            echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+            sudo docker run -d -p 5000:2001 ${{ secrets.DOCKER_USERNAME }}/nodeimage
+          
 
-    - name: Build Docker image
-      run: |
-        docker build -t nodeimage:${{ github.sha }} .
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker push my-node-app:${{ github.sha }}
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+
+  #   - name: Set up Docker
+  #     uses: docker/setup-docker@v1
+
+  #   - name: Run Docker container
+  #     run: |
+  #       docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+  #       docker run -d -p 2001:2001 nodeimage
