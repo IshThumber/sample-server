@@ -60,8 +60,7 @@ jobs:
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
           debug: false
           command: |
-            pwd
-            ll
+            echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
           
 
   # deploy:
