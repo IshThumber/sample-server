@@ -52,7 +52,17 @@ jobs:
         run: |
           docker build . -t ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
-
+  
+      - name: Execute SSH commmands on remote server
+        uses: JimCronqvist/action-ssh@master
+        with:
+          hosts: 'ubuntu@15.206.187.32:22'
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          debug: false
+          command: |
+            pwd
+            ll
+          
 
   # deploy:
   #   needs: build
