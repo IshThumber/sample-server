@@ -20,8 +20,8 @@ jobs:
 
             - name: Build Docker image
               run: |
-                  docker build . -t ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
-                  docker push ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+                  sudo docker build . -t ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+                  sudo docker push ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
 
             - name: Execute SSH commmands on remote server
               uses: JimCronqvist/action-ssh@master
@@ -38,7 +38,7 @@ jobs:
                   sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
                   sudo docker rm -f nodecontainer
                   sudo docker run -d -p 5000:2001 --name nodecontainer ${{ secrets.DOCKER_USERNAME }}/nodeimage
-                  
+
 # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
 # sudo docker rm -f nodecontainer
 # sudo docker run -d -p 5000:2001 --name nodecontainer ${{ secrets.DOCKER_USERNAME }}/nodeimage
