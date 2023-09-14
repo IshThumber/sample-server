@@ -32,12 +32,11 @@ jobs:
                   command: |
                       echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-# firstly pull the docker image second make sure it is not running if running delete the container or restart the container 
-            - name: Run docker image to Container
-              run: |
-                  sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
-                  sudo docker rm -f nodecontainer
-                  sudo docker run -d -p 5000:2001 --name nodecontainer ${{ secrets.DOCKER_USERNAME }}/nodeimage
+            # - name: Run docker image to Container
+            #   run: |
+            #       sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+            #       sudo docker rm -f nodecontainer
+            #       sudo docker run -d -p 5000:2001 --name nodecontainer ${{ secrets.DOCKER_USERNAME }}/nodeimage
 
 # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
 # sudo docker rm -f nodecontainer
