@@ -52,3 +52,20 @@ jobs:
         run: |
           docker build . -t ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+
+
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+
+  #   - name: Set up Docker
+  #     uses: docker/setup-docker@v1
+
+  #   - name: Run Docker container
+  #     run: |
+  #       docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+  #       docker run -d -p 2001:2001 nodeimage
