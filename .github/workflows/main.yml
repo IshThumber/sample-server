@@ -20,17 +20,17 @@ jobs:
 
             - name: Build Docker image
               run: |
-                  sudo docker build . -t ${{ secrets.DOCKER_USERNAME }}/node-image:latest
-                  sudo docker push ${{ secrets.DOCKER_USERNAME }}/node-image:latest
+                  sudo docker build . -t ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+                  sudo docker push ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
 
-            - name: Execute SSH commmands on remote server
-              uses: JimCronqvist/action-ssh@master
-              with:
-                  hosts: "ubuntu@15.206.187.32:22"
-                  privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
-                  debug: false
-                  command: |
-                      echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            # - name: Execute SSH commmands on remote server
+            #   uses: JimCronqvist/action-ssh@master
+            #   with:
+            #       hosts: "ubuntu@15.206.187.32:22"
+            #       privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+            #       debug: false
+            #       command: |
+            #           echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
             # - name: Run docker image to Container
             #   run: |
