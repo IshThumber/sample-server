@@ -61,6 +61,8 @@ jobs:
           debug: false
           command: |
             echo '${{ secrets.DOCKER_PASSWORD }}' | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nodeimage:latest
+            sudo docker run -d -p 5000:2001 nodeimage
           
 
   # deploy:
