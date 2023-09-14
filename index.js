@@ -12,7 +12,7 @@ app.get("/test", (req, res) => {
 });
 
 app.get("/check", (req, res) => {
-    res.send("Checking the node server tara bhai nu");
+    res.send("Checking the node server....");
 });
 
 app.listen(PORT, () => {
