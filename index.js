@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/test", (req, res) => {
-    res.send("Testing the node server on the instance sfgd");
+    res.send("Testing the node server on the instance Ankit");
 });
 
 app.get("/check", (req, res) => {
